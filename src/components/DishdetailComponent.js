@@ -1,6 +1,6 @@
 import React from 'react';
-import {Card, CardBody, CardText, CardImg, CardTitle} from 'reactstrap';
-
+import {Card, CardBody, CardText, CardImg, CardTitle, Breadcrumb, BreadcrumbItem} from 'reactstrap';
+import {Link} from 'react-router-dom'
 
     
 
@@ -35,12 +35,24 @@ function RenderComments({comments})
     })
 }
 
-const Dishdetail=(props)=>
+const DishDetail=(props)=>
 {
     if(!props.selectedDish)
         return (<div></div>);
     return (
         <div className="container">
+            <div className="row">
+                <Breadcrumb>
+                    <BreadcrumbItem><Link to="/menu">Menu</Link></BreadcrumbItem>
+                    <BreadcrumbItem active>[props.selectedDish.name]</BreadcrumbItem>
+                </Breadcrumb>
+                <div className="col-12">
+                    <h3>{props.selectedDish.name}</h3>
+                    <br/>
+                </div>
+            </div>
+
+
             <div className="row">
                 <div className="col-12 col-md-5 m-1">
                     <RenderDish selectedDish={props.selectedDish}></RenderDish>
@@ -48,7 +60,7 @@ const Dishdetail=(props)=>
                 <div className="col-12 col-md-5 m-1">
                     <h2>Comments</h2>
                     <ul className="list-unstyled">
-                        <RenderComments comments= {props.selectedDish.comments}></RenderComments>                        </ul>
+                        <RenderComments comments= {props.comments}></RenderComments>                        </ul>
                 </div>
             </div>
         </div>
@@ -56,5 +68,5 @@ const Dishdetail=(props)=>
     );
 }
 
-export default Dishdetail;
+export default DishDetail;
 
