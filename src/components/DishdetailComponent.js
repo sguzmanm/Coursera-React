@@ -4,6 +4,7 @@ import {Link} from 'react-router-dom'
 
 import {Modal, ModalBody, ModalHeader, Button, Label, Row, Col} from 'reactstrap';
 import {LocalForm, Control, Errors} from 'react-redux-form';
+import {Loading} from './LoadingComponent';
 
 const minLength=(len)=>(val)=>val && val.length>=len;
 const maxLength=(len)=>(val)=>!val || val.length<=len;
@@ -31,7 +32,7 @@ class CommentForm extends Component{
 
     handleSubmit(values)
     {
-        alert('The current state is '+JSON.stringify(values));
+        this.props.addComment(this.props.dishId,values.author,values.comment,values.rating);
     }
 
 
@@ -125,7 +126,7 @@ function RenderDish({selectedDish})
     );
 }
 
-function RenderComments({comments})
+function RenderComments({comments, addComment, dishId})
 {
     if(!comments)
         return(<div></div>);
@@ -144,7 +145,32 @@ function RenderComments({comments})
 
 const DishDetail=(props)=>
 {
-    if(!props.selectedDish)
+    if(props.isLoading)
+    {
+        return(
+        <div className="container">
+            <div className="row">
+                <div className="col-12">
+                    <Loading></Loading>
+                </div>
+            </div>
+        </div>
+        )
+    }
+    else if (props.errMss)
+    {
+        return(
+        <div className="container">
+            <div className="row">
+                <div className="col-12">
+                    <h4>{props.errMss}</h4>
+                </div>
+            </div>
+        </div>
+        )
+
+    }
+    else if(!props.selectedDish)
         return (<div></div>);
     return (
         <div className="container">
@@ -168,7 +194,7 @@ const DishDetail=(props)=>
                     <h2>Comments</h2>
                     <ul className="list-unstyled">
                         <RenderComments comments= {props.comments}></RenderComments>
-                        <CommentForm></CommentForm>                        
+                        <CommentForm addComment={props.addComment} dishId={props.selectedDish.id}></CommentForm>                        
                     </ul>
                 </div>
             </div>
